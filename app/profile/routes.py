@@ -163,7 +163,12 @@ def public_card(user_id):
             
     try:
         from io import BytesIO
-        img = generate_progress_card(user)
+        name = user.get("name", "Anonymous")
+        c_score = user.get("c_score", 0)
+        dsa_progress = user.get("dsa_progress", 0)
+        current_streak = user.get("current_streak", 0)
+        platforms = user.get("platforms", {})
+        img = generate_progress_card(name, c_score, dsa_progress, current_streak, platforms)
         img_io = BytesIO()
         img.save(img_io, 'PNG')
         img_io.seek(0)
