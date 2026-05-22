@@ -135,18 +135,15 @@ def create_app():
         response.headers['Retry-After'] = str(retry_after)
         return response
 
+    @app.after_request
+    def add_security_headers(response):
+        response.headers['Content-Security-Policy'] = (
+            "default-src 'self'; "
+            "style-src 'self' https://googleapis.com https://jsdelivr.net; "
+            "font-src 'self' https://gstatic.com https://jsdelivr.net; "
+            "script-src 'self'; "
+            "img-src 'self' data:;"
+        )
+        return response
+
     return app
-
-
-
-@app.after_request
-def add_security_headers(response):
-    response.headers['Content-Security-Policy'] = (
-        "default-src 'self'; "
-        "style-src 'self' https://googleapis.com https://jsdelivr.net; "
-        "font-src 'self' https://gstatic.com https://jsdelivr.net; "
-        "script-src 'self'; "
-        "img-src 'self' data:;"
-    )
-    return response
-
