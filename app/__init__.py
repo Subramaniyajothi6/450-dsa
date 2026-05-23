@@ -10,6 +10,7 @@ from app.auth import auth_bp
 from app.faq import faq_bp
 from app.extensions import bcrypt, db, limiter, login_manager, mongo, oauth, cache
 from app.leaderboard import leaderboard_bp
+from app.public.routes import public_bp
 from app.profile import profile_bp
 from app.search import search_bp
 from app.tracker import tracker_bp
@@ -19,7 +20,7 @@ from app.utils import platform_color_filter, platform_name_filter
 def create_app():
     load_dotenv()
 
-    app = Flask(__name__, template_folder="../templates")
+    app = Flask(__name__, template_folder="../templates", static_folder="../static")
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "supersecretkey")
     app.config["MONGO_URI"] = os.environ.get("MONGO_URI", "mongodb://localhost:27017/450_dsa")
     app.config["CACHE_TYPE"] = "SimpleCache"
@@ -123,6 +124,7 @@ def create_app():
     app.register_blueprint(leaderboard_bp)
     app.register_blueprint(search_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(public_bp)
 
     @app.errorhandler(429)
     def ratelimit_handler(e):
